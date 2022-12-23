@@ -1149,7 +1149,7 @@ int idStr::Icmp( const char *s1, const char *s2 ) {
 idStr::Icmpn
 ================
 */
-int idStr::Icmpn( const char *s1, const char *s2, int n ) {
+int idStr::Icmpn( const char *s1, const char *s2, size_t n ) {
 	int c1, c2, d;
 
 	assert( n >= 0 );
@@ -1296,7 +1296,7 @@ int idStr::IcmpPath( const char *s1, const char *s2 ) {
 idStr::IcmpnPath
 ================
 */
-int idStr::IcmpnPath( const char *s1, const char *s2, int n ) {
+int idStr::IcmpnPath( const char *s1, const char *s2, size_t n ) {
 	int c1, c2, d;
 
 #if 0

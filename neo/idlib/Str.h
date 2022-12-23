@@ -174,7 +174,7 @@ public:
 
 						// case insensitive compare
 	int					Icmp( const char *text ) const;
-	int					Icmpn( const char *text, int n ) const;
+	int					Icmpn( const char *text, size_t n ) const;
 	int					IcmpPrefix( const char *text ) const;
 
 						// case insensitive compare ignoring color
@@ -182,7 +182,7 @@ public:
 
 						// compares paths and makes sure folders come first
 	int					IcmpPath( const char *text ) const;
-	int					IcmpnPath( const char *text, int n ) const;
+	int					IcmpnPath( const char *text, size_t n ) const;
 	int					IcmpPrefixPath( const char *text ) const;
 
 	int					Length( void ) const;
@@ -259,10 +259,10 @@ public:
 	static int			Cmp( const char *s1, const char *s2 );
 	static int			Cmpn( const char *s1, const char *s2, int n );
 	static int			Icmp( const char *s1, const char *s2 );
-	static int			Icmpn( const char *s1, const char *s2, int n );
+	static int			Icmpn( const char *s1, const char *s2, size_t n );
 	static int			IcmpNoColor( const char *s1, const char *s2 );
 	static int			IcmpPath( const char *s1, const char *s2 );			// compares paths and makes sure folders come first
-	static int			IcmpnPath( const char *s1, const char *s2, int n );	// compares paths and makes sure folders come first
+	static int			IcmpnPath( const char *s1, const char *s2, size_t n );	// compares paths and makes sure folders come first
 	static void			Append( char *dest, int size, const char *src );
 	static void			Copynz( char *dest, const char *src, int destsize );
 	static int			snPrintf( char *dest, int size, const char *fmt, ... ) id_attribute((format(printf,3,4)));
@@ -669,7 +669,7 @@ ID_INLINE int idStr::Icmp( const char *text ) const {
 	return idStr::Icmp( data, text );
 }
 
-ID_INLINE int idStr::Icmpn( const char *text, int n ) const {
+ID_INLINE int idStr::Icmpn( const char *text, size_t n ) const {
 	assert( text );
 	return idStr::Icmpn( data, text, n );
 }
@@ -689,7 +689,7 @@ ID_INLINE int idStr::IcmpPath( const char *text ) const {
 	return idStr::IcmpPath( data, text );
 }
 
-ID_INLINE int idStr::IcmpnPath( const char *text, int n ) const {
+ID_INLINE int idStr::IcmpnPath( const char *text, size_t n ) const {
 	assert( text );
 	return idStr::IcmpnPath( data, text, n );
 }
