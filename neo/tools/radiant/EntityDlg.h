@@ -76,7 +76,7 @@ protected:
 public:
 
 	virtual BOOL OnInitDialog();
-	virtual int OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
+	virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
 	void AddClassNames();
 	void UpdateEntitySel(eclass_t *ent);
 	void SetKeyValPairs( bool updateAnims = true );
