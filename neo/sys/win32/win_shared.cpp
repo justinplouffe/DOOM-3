@@ -660,37 +660,13 @@ address_t GetFuncAddr( address_t midPtPtr ) {
 
 /*
 ==================
-GetCallerAddr
-==================
-*/
-address_t GetCallerAddr( long _ebp ) {
-	long midPtPtr;
-	long res = 0;
-
-	__asm {
-		mov		eax, _ebp
-		mov		ecx, [eax]		// check for end of stack frames list
-		test	ecx, ecx		// check for zero stack frame
-		jz		label
-		mov		eax, [eax+4]	// get the ret address
-		test	eax, eax		// check for zero return address
-		jz		label
-		mov		midPtPtr, eax
-	}
-	res = GetFuncAddr( midPtPtr );
-label:
-	return res;
-}
-
-/*
-==================
 Sys_GetCallStack
 
  use /Oy option
 ==================
 */
 void Sys_GetCallStack( address_t *callStack, const int callStackSize ) {
-#if 1 //def _DEBUG
+#if 0
 	int i;
 	long m_ebp;
 
