@@ -46,12 +46,12 @@ Sys_GetClockTicks
 ================
 */
 double Sys_GetClockTicks( void ) {
-#if 0
+#if 1
 
 	LARGE_INTEGER li;
 
 	QueryPerformanceCounter( &li );
-	return = (double ) li.LowPart + (double) 0xFFFFFFFF * li.HighPart;
+	return (double ) li.LowPart + (double) 0xFFFFFFFF * li.HighPart;
 
 #else
 
@@ -124,72 +124,10 @@ double Sys_ClockTicksPerSecond( void ) {
 ==============================================================
 */
 
-/*
-================
-HasCPUID
-================
-*/
-static bool HasCPUID( void ) {
-	__asm 
-	{
-		pushfd						// save eflags
-		pop		eax
-		test	eax, 0x00200000		// check ID bit
-		jz		set21				// bit 21 is not set, so jump to set_21
-		and		eax, 0xffdfffff		// clear bit 21
-		push	eax					// save new value in register
-		popfd						// store new value in flags
-		pushfd
-		pop		eax
-		test	eax, 0x00200000		// check ID bit
-		jz		good
-		jmp		err					// cpuid not supported
-set21:
-		or		eax, 0x00200000		// set ID bit
-		push	eax					// store new value
-		popfd						// store new value in EFLAGS
-		pushfd
-		pop		eax
-		test	eax, 0x00200000		// if bit 21 is on
-		jnz		good
-		jmp		err
-	}
-
-err:
-	return false;
-good:
-	return true;
-}
-
 #define _REG_EAX		0
 #define _REG_EBX		1
 #define _REG_ECX		2
 #define _REG_EDX		3
-
-/*
-================
-CPUID
-================
-*/
-static void CPUID( int func, unsigned regs[4] ) {
-	unsigned regEAX, regEBX, regECX, regEDX;
-
-	__asm pusha
-	__asm mov eax, func
-	__asm __emit 00fh
-	__asm __emit 0a2h
-	__asm mov regEAX, eax
-	__asm mov regEBX, ebx
-	__asm mov regECX, ecx
-	__asm mov regEDX, edx
-	__asm popa
-
-	regs[_REG_EAX] = regEAX;
-	regs[_REG_EBX] = regEBX;
-	regs[_REG_ECX] = regECX;
-	regs[_REG_EDX] = regEDX;
-}
-
 
 /*
 ================
@@ -201,7 +139,7 @@ static bool IsAMD( void ) {
 	char processorString[13];
 
 	// get name of processor
-	CPUID( 0, ( unsigned int * ) pstring );
+	__cpuid((int*)pstring, 0);
 	processorString[0] = pstring[4];
 	processorString[1] = pstring[5];
 	processorString[2] = pstring[6];
@@ -228,10 +166,10 @@ HasCMOV
 ================
 */
 static bool HasCMOV( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 0 );
 
 	// bit 15 of EDX denotes CMOV existence
 	if ( regs[_REG_EDX] & ( 1 << 15 ) ) {
@@ -246,16 +184,16 @@ Has3DNow
 ================
 */
 static bool Has3DNow( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// check AMD-specific functions
-	CPUID( 0x80000000, regs );
+	__cpuid( regs, 0x80000000);
 	if ( regs[_REG_EAX] < 0x80000000 ) {
 		return false;
 	}
 
 	// bit 31 of EDX denotes 3DNow! support
-	CPUID( 0x80000001, regs );
+	__cpuid( regs, 0x80000001 );
 	if ( regs[_REG_EDX] & ( 1 << 31 ) ) {
 		return true;
 	}
@@ -269,10 +207,10 @@ HasMMX
 ================
 */
 static bool HasMMX( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 23 of EDX denotes MMX existence
 	if ( regs[_REG_EDX] & ( 1 << 23 ) ) {
@@ -287,10 +225,10 @@ HasSSE
 ================
 */
 static bool HasSSE( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 25 of EDX denotes SSE existence
 	if ( regs[_REG_EDX] & ( 1 << 25 ) ) {
@@ -305,10 +243,10 @@ HasSSE2
 ================
 */
 static bool HasSSE2( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 26 of EDX denotes SSE2 existence
 	if ( regs[_REG_EDX] & ( 1 << 26 ) ) {
@@ -323,10 +261,10 @@ HasSSE3
 ================
 */
 static bool HasSSE3( void ) {
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 0 of ECX denotes SSE3 existence
 	if ( regs[_REG_ECX] & ( 1 << 0 ) ) {
@@ -478,11 +416,11 @@ HasHTT
 ================
 */
 static bool HasHTT( void ) {
-	unsigned regs[4];
+	int regs[4];
 	int logicalNum, physicalNum, HTStatusFlag;
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 28 of EDX denotes HTT existence
 	if ( !( regs[_REG_EDX] & ( 1 << 28 ) ) ) {
@@ -505,10 +443,10 @@ static bool HasDAZ( void ) {
 	__declspec(align(16)) unsigned char FXSaveArea[512];
 	unsigned char *FXArea = FXSaveArea;
 	DWORD dwMask = 0;
-	unsigned regs[4];
+	int regs[4];
 
 	// get CPU feature bits
-	CPUID( 1, regs );
+	__cpuid( regs, 1 );
 
 	// bit 24 of EDX denotes support for FXSAVE
 	if ( !( regs[_REG_EDX] & ( 1 << 24 ) ) ) {
@@ -533,11 +471,6 @@ Sys_GetCPUId
 */
 cpuid_t Sys_GetCPUId( void ) {
 	int flags;
-
-	// verify we're at least a Pentium or 486 with CPUID support
-	if ( !HasCPUID() ) {
-		return CPUID_UNSUPPORTED;
-	}
 
 	// check for an AMD
 	if ( IsAMD() ) {
