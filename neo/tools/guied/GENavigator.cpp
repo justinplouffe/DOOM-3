@@ -429,7 +429,7 @@ Window Procedure for the embedded list control
 */
 LRESULT CALLBACK rvGENavigator::ListWndProc ( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	rvGENavigator* nav = (rvGENavigator*) GetWindowLong ( hWnd, GWL_USERDATA );
+	rvGENavigator* nav = (rvGENavigator*) GetWindowLongPtr ( hWnd, GWLP_USERDATA );
 	assert ( nav );
 	
 	switch ( msg )

@@ -76,9 +76,9 @@ bool rvPropertyGrid::Create ( HWND parent, int id, int style )
 
 	// Create the List view
 	mWindow = CreateWindowEx ( 0, "LISTBOX", "", WS_VSCROLL|WS_CHILD|WS_VISIBLE|LBS_OWNERDRAWFIXED|LBS_NOINTEGRALHEIGHT|LBS_NOTIFY, 0, 0, 0, 0, parent, (HMENU)id, win32.hInstance, 0 );	
-	mListWndProc = (WNDPROC)GetWindowLong ( mWindow, GWL_WNDPROC );
-	SetWindowLong ( mWindow, GWL_USERDATA, (LONG)this );
-	SetWindowLong ( mWindow, GWL_WNDPROC, (LONG)WndProc );
+	mListWndProc = (WNDPROC)GetWindowLongPtr ( mWindow, GWLP_WNDPROC );
+	SetWindowLongPtr( mWindow, GWLP_USERDATA, (LONG)this );
+	SetWindowLongPtr ( mWindow, GWLP_WNDPROC, (LONG)WndProc );
 
 	LoadLibrary ( "Riched20.dll" );
 	mEdit = CreateWindowEx ( 0, "RichEdit20A", "", WS_CHILD, 0, 0, 0, 0, mWindow, (HMENU) 999, win32.hInstance, NULL );
