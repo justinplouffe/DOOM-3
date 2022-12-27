@@ -383,7 +383,7 @@ Window procedure for property grid
 */
 LRESULT CALLBACK rvPropertyGrid::WndProc ( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	rvPropertyGrid* grid = (rvPropertyGrid*) GetWindowLong ( hWnd, GWL_USERDATA );
+	rvPropertyGrid* grid = (rvPropertyGrid*) GetWindowLongPtr ( hWnd, GWLP_USERDATA );
 	
 	switch ( msg )
 	{			

@@ -138,7 +138,7 @@ bool GEItescriptsDlg_Apply ( HWND hwnd )
 	HWND				script;
 	
 	// Extract the window pointer from the win32 windows user data long
-	window = (idWindow*)GetWindowLong ( hwnd, GWL_USERDATA );
+	window = (idWindow*)GetWindowLongPtr ( hwnd, GWLP_USERDATA );
 	assert ( window );
 	
 	// Get the window wrapper of the script window
@@ -306,7 +306,7 @@ INT_PTR CALLBACK GEItescriptsDlg_WndProc ( HWND hwnd, UINT msg, WPARAM wParam, L
 	switch ( msg )
 	{
 		case WM_INITDIALOG:
-			SetWindowLong ( hwnd, GWL_USERDATA, lParam );
+			SetWindowLongPtr ( hwnd, GWLP_USERDATA, lParam );
 			GEItescriptsDlg_Init ( hwnd );
 
 			gApp.GetOptions().GetWindowPlacement ( "scripts", hwnd );
