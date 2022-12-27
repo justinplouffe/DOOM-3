@@ -30,12 +30,12 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "Simd_Generic.h"
-#include "Simd_MMX.h"
-#include "Simd_3DNow.h"
-#include "Simd_SSE.h"
-#include "Simd_SSE2.h"
-#include "Simd_SSE3.h"
-#include "Simd_AltiVec.h"
+// #include "Simd_MMX.h"
+// #include "Simd_3DNow.h"
+// #include "Simd_SSE.h"
+// #include "Simd_SSE2.h"
+// #include "Simd_SSE3.h"
+// #include "Simd_AltiVec.h"
 
 
 idSIMDProcessor	*	processor = NULL;			// pointer to SIMD processor
@@ -66,10 +66,11 @@ void idSIMD::InitProcessor( const char *module, bool forceGeneric ) {
 
 	cpuid = idLib::sys->GetProcessorId();
 
-	if ( forceGeneric ) {
+	// if ( forceGeneric ) {
 
 		newProcessor = generic;
 
+	/*
 	} else {
 
 		if ( !processor ) {
@@ -93,6 +94,7 @@ void idSIMD::InitProcessor( const char *module, bool forceGeneric ) {
 
 		newProcessor = processor;
 	}
+	*/
 
 	if ( newProcessor != SIMDProcessor ) {
 		SIMDProcessor = newProcessor;
@@ -141,7 +143,7 @@ idSIMDProcessor *p_simd;
 idSIMDProcessor *p_generic;
 long baseClocks = 0;
 
-#ifdef _WIN32
+#if 0
 
 #define TIME_TYPE int
 
@@ -4105,6 +4107,7 @@ void idSIMD::Test_f( const idCmdArgs &args ) {
 	SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
 #endif /* _WIN32 */
 
+	/*
 	p_simd = processor;
 	p_generic = generic;
 
@@ -4218,6 +4221,8 @@ void idSIMD::Test_f( const idCmdArgs &args ) {
 	}
 	p_simd = NULL;
 	p_generic = NULL;
+
+	*/
 
 #ifdef _WIN32
 	SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_NORMAL );
